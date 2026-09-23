@@ -4,7 +4,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - space-packages:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
