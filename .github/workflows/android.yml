@@ -1,0 +1,30 @@
+name: Android
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - space-packages:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+    - name: Build ArmorPaint
+      run: |
+        node armorcore/make --target android
+        cd build/ArmorPaint
+        chmod +x gradlew
+        ./gradlew assembleDebug
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: armorpaint-apk
+        path: build/ArmorPaint/app/build/outputs/apk/debug/app-debug.apk
